@@ -10,7 +10,7 @@ public abstract class Person {
         if(id < 0){
             throw new CustomException("ID duhet te jete pozitive!");
         }
-        if(name == null && name.trim().isEmpty()){
+        if(name == null || name.trim().isEmpty()){
             throw new CustomException("Personi duhet te kete nje emer!");
         }
         this.id = id;
