@@ -13,7 +13,6 @@ public class PatientRepository {
 
     public PatientRepository() {
         patients = new ArrayList<>();
-        System.out.println("File path: " + FILE_NAME);
         try {
             loadPatientsFromFile(); // Ngarko pacientët nga skedari në fillim
         }
@@ -87,7 +86,7 @@ public class PatientRepository {
             writer.flush(); // Force the data to be written to disk
 
         } catch (IOException e) {
-            System.err.println("Gabim gjatë ruajtjes në skedar: " + e.getMessage());
+            System.out.println("Gabim gjatë ruajtjes në skedar: " + e.getMessage());
             e.printStackTrace(); // Add this to see full error
         }
     }
@@ -149,7 +148,7 @@ public class PatientRepository {
             System.out.println("Numri i pacientëve në fillim: " + repo.getAllPatients().size());
 
             System.out.println("\n2. Testimi i shtimit të pacientëve...");
-            // Test 1: Add patients
+          //   Test 1: Add patients
             Patient p1 = new Patient(1, "Filani", "123-456-7890", "john.doe@email.com", 30);
             Patient p2 = new Patient(2, "Jane Smith", "098-765-4321", "jane.smith@email.com", 25);
             Patient p3 = new Patient(3, "Bob Johnson", "555-123-4567", "bob.j@email.com", 40);
