@@ -68,12 +68,9 @@ public class PatientRepository {
 
     // 7. METODA PËR TË RUAJTUR NË SKEDAR
     private void savePatientsToFile() {
-        System.out.println("DEBUG: Attempting to save " + patients.size() + " patients to: " + FILE_NAME);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            System.out.println("DEBUG: FileWriter created successfully");
 
-            int count = 0;
             for (Patient patient : patients) {
                 String line = String.join(DELIMITER,
                         String.valueOf(patient.getId()),
@@ -84,12 +81,10 @@ public class PatientRepository {
                 );
                 writer.write(line);
                 writer.newLine();
-                count++;
-                System.out.println("DEBUG: Wrote patient " + patient.getId() + ": " + patient.getName());
-            }
 
+
+            }
             writer.flush(); // Force the data to be written to disk
-            System.out.println("DEBUG: Successfully wrote " + count + " patients");
 
         } catch (IOException e) {
             System.err.println("Gabim gjatë ruajtjes në skedar: " + e.getMessage());
@@ -142,17 +137,20 @@ public class PatientRepository {
     }
     public static void main(String[] args) {
         try {
+
+
             System.out.println("=== TESTIM I PATIENTREPOSITORY ===");
 
             // Create repository instance
             PatientRepository repo = new PatientRepository();
+
 
             System.out.println("\n1. Testimi i krijimit të repository dhe skedarit...");
             System.out.println("Numri i pacientëve në fillim: " + repo.getAllPatients().size());
 
             System.out.println("\n2. Testimi i shtimit të pacientëve...");
             // Test 1: Add patients
-            Patient p1 = new Patient(1, "John Doe", "123-456-7890", "john.doe@email.com", 30);
+            Patient p1 = new Patient(1, "Filani", "123-456-7890", "john.doe@email.com", 30);
             Patient p2 = new Patient(2, "Jane Smith", "098-765-4321", "jane.smith@email.com", 25);
             Patient p3 = new Patient(3, "Bob Johnson", "555-123-4567", "bob.j@email.com", 40);
 
