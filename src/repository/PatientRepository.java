@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientRepository {
-    private static final String FILE_NAME = System.getProperty("user.dir") + "/Patients.txt";
+    private static final String FILE_NAME = "Patients.txt";
     private static final String DELIMITER = ",";
     private List<Patient> patients;
 
@@ -142,6 +142,7 @@ public class PatientRepository {
 
             // Create repository instance
             PatientRepository repo = new PatientRepository();
+
 
 
             System.out.println("\n1. Testimi i krijimit të repository dhe skedarit...");
