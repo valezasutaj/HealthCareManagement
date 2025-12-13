@@ -11,8 +11,7 @@ import java.util.List;
 public class DoctorRepository {
 
     private static final String FILE_NAME = "doctors.txt";
-    private static final String DELIMITER = ",";
-
+    private static final String DELIMITER = ";";
     private final List<Doctor> doctors = new ArrayList<>();
 
     public DoctorRepository() {

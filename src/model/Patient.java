@@ -8,7 +8,13 @@ public class Patient extends Person {
         this.age = age;
     }
 
-    public String getDetails(){return ""; }
+    public String getDetails() {
+        return "Patient [ID= " + getId()
+                + ", Emri= " + getName()
+                + ", Tel= " + getPhone()
+                + ", Email= " + getEmail()
+                + ", Mosha= " + age + "]";
+    }
 
     public int getAge() {
         return age;

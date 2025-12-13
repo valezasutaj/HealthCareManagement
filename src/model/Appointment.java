@@ -8,7 +8,7 @@ public class Appointment {
     private Doctor staff ;
     private Date date ;
     private String report;
-    AppointmentStatus as;
+    private AppointmentStatus status;
 
     public Appointment(int id, Patient patient, Doctor staff, Date date, String report) throws CustomException {
         if(id < 0){
@@ -66,15 +66,32 @@ public class Appointment {
         return report;
     }
 
-    public void setReport(String report) {
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
+        if (status != AppointmentStatus.COMPLETED) {
+            this.report = null;
+        }
+    }
+
+    public void setReport(String report) throws CustomException {
+        if (status != AppointmentStatus.COMPLETED) {
+            throw new CustomException("Raporti lejohet vetem kur termini eshte i perfunduar!");
+        }
         this.report = report;
     }
 
-    public AppointmentStatus getAs() {
-        return as;
-    }
-
-    public void setAs(AppointmentStatus as) {
-        this.as = as;
+    public String getDetails() {
+        String patientDetails = (patient == null) ? "null" : patient.getDetails();
+        String doctorDetails = (staff == null) ? "null" : staff.getDetails();
+        return "Appointment [ID= " + id
+                + ", Pacienti= " + patientDetails
+                + ", Doktori= " + doctorDetails
+                + ", Data= " + date
+                + ", Status= " + status
+                + ", Raporti= " + report + "]";
     }
 }

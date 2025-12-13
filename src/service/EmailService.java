@@ -8,6 +8,6 @@ public class EmailService implements NotificationService {
     }
 
     public void sendNotification(String message){
-        System.out.println("Notification nga: " + email + "\nMesazhi: " + message);
+        System.out.println("Njoftim dergohet tek: " + email + " (EMAIL)\nMesazhi: " + message);
     };
 }

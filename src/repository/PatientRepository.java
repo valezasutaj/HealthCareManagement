@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PatientRepository {
     private static final String FILE_NAME = "Patients.txt";
-    private static final String DELIMITER = ",";
+    private static final String DELIMITER = ";";
     private List<Patient> patients;
 
 

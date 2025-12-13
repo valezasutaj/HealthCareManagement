@@ -8,6 +8,6 @@ public class SMSService implements NotificationService {
     }
 
     public void sendNotification(String message){
-        System.out.println("Notification nga: " + number + "\nMesazhi: " + message);
+        System.out.println("Njoftim dergohet tek: " + number + " (SMS)\nMesazhi: " + message);
     };
 }
