@@ -18,12 +18,17 @@ public class Doctor extends Person {
 
     @Override
     public String getDetails() {
-        return "Doktor [ID=" + getId()
-                + ", Emri=" + getName()
-                + ", Specializimi=" + speciality
-                + ", Tel=" + getPhone()
+        return "Doctor [ID=" + getId()
+                + ", Name=" + getName()
+                + ", Specialty=" + speciality
+                + ", Phone=" + getPhone()
                 + ", Email=" + getEmail()
                 + "]";
+    }
+
+    @Override
+    public String toString() {
+        return getDetails();
     }
 
     public String getSpeciality() {
