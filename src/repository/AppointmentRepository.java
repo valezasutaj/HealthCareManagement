@@ -36,7 +36,7 @@ public class AppointmentRepository {
         Doctor doctor = doctorRepository.getDoctorById(doctorId);
 
         if (report.contains(";") || report.contains("\n")) {
-            throw new CustomException("Raporti nuk duhet të përmbajë ';' ose rresht të ri");
+            throw new CustomException("Raporti nuk duhet te permbaje ';' ose rresht te ri");
         }
 
         int id = getNextId();

@@ -21,7 +21,7 @@ public class Console {
                         "   T  → Terminet\n" +
                         "   N  → Dërgo njoftim\n" +
                         "\n" +
-                        "   Q  → Dil nga aplikacioni\n" +
+                        "   Exit  → Dil nga aplikacioni\n" +
                         "═══════════════════════════════════════════════════════════════"
         );
     }

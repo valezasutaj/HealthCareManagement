@@ -1,10 +1,10 @@
 package model;
 
 public abstract class Person {
-    private int id;
-    private String name;
-    private String phone;
-    private String email;
+    protected int id;
+    protected String name;
+    protected String phone;
+    protected String email;
 
     public Person(int id, String name, String phone, String email) throws CustomException {
         if(id < 0){

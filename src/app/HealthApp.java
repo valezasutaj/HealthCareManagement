@@ -40,11 +40,11 @@ public class HealthApp {
                 case "D" -> doctorMenu();
                 case "T" -> appointmentMenu();
                 case "N" -> notificationMenu();
-                case "Q" -> {
+                case "E" -> {
                     System.out.println("Mireupafshim!");
                     return;
                 }
-                default -> System.out.println("Opsion i pavlefshem!\n");
+                default -> System.out.println("Zgjedh nje nga opsionet [P, S, T, N, E]!\n");
             }
         }
     }
@@ -62,7 +62,7 @@ public class HealthApp {
                     case "4" -> updatePatient();
                     case "5" -> removePatient();
                     case "B" -> {return;}
-                    default -> System.out.println("Opsion i pavlefshem!");
+                    default -> System.out.println("Zgjedh nje nga opsionet [1, 2, 3, 4, 5, B]!");
                 }
             } catch (CustomException e) {
                 Console.error(e.getMessage());
@@ -83,7 +83,7 @@ public class HealthApp {
                     case "4" -> updateDoctor();
                     case "5" -> removeDoctor();
                     case "B" -> {return;}
-                    default -> System.out.println("Opsion i pavlefshem!");
+                    default -> System.out.println("Zgjedh nje nga opsionet [1, 2, 3, 4, 5, B]!");
                 }
             } catch (CustomException e) {
                 Console.error(e.getMessage());
@@ -106,7 +106,7 @@ public class HealthApp {
                     case "6" -> cancelAppointment();
                     case "7" -> removeAppointment();
                     case "B" -> {return;}
-                    default -> System.out.println("Opsion i pavlefshem!");
+                    default -> System.out.println("Zgjedh nje nga opsionet [1, 2, 3, 4, 5, 6, 7, B]!!");
                 }
             } catch (CustomException e) {
                 Console.error(e.getMessage());
@@ -123,7 +123,7 @@ public class HealthApp {
                     case "1" -> sendEmailNotification();
                     case "2" -> sendSmsNotification();
                     case "B" -> {return;}
-                    default -> System.out.println("Opsion i pavlefshem!");
+                    default -> System.out.println("Zgjedh nje nga opsionet [1, 2, B]!");
                 }
             } catch (CustomException e) {
                 Console.error(e.getMessage());
@@ -135,7 +135,6 @@ public class HealthApp {
         Console.section("Regjistrim pacienti");
 
         int suggestedId = nextPatientId();
-        System.out.println("Sugjerim ID (automatik): " + suggestedId);
         int id = readIntWithDefault("ID (shtyp Enter per " + suggestedId + "): ", suggestedId);
 
         String name = readNonEmpty("Emri: ");
@@ -320,7 +319,7 @@ public class HealthApp {
                 case "1" -> {return AppointmentStatus.SCHEDULED;}
                 case "2" -> {return AppointmentStatus.COMPLETED;}
                 case "3" -> {return AppointmentStatus.CANCELLED;}
-                default -> System.out.println("Opsion i pavlefshem!");
+                default -> System.out.println("Zgjedh nje nga opsionet [1, 2, 3]!");
             }
         }
     }
@@ -364,10 +363,15 @@ public class HealthApp {
     }
 
     private void removeAppointment() throws CustomException {
+
         int id = readInt("ID e terminit: ");
         appointmentRepo.removeAppointment(id);
+        if(!patientRepo.isIdUsed(id)){
+            Console.error("Nuk ka termin me kete id!");
+        } else {
+            Console.success("Termini u fshi.");
+        }
 
-        Console.success("Termini u fshi.");
     }
 
     private void listPatientsForAppointment() {
