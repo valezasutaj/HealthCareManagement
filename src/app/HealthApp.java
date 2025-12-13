@@ -2,7 +2,6 @@ package app;
 import model.*;
 import repository.*;
 import service.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,12 +10,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class HealthApp {
-
     private final PatientRepository patientRepo;
     private final DoctorRepository doctorRepo;
     private final AppointmentRepository appointmentRepo;
     private final Scanner sc;
-
     private final SimpleDateFormat dtFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT);
 
     public HealthApp() {
@@ -24,7 +21,6 @@ public class HealthApp {
         this.doctorRepo = new DoctorRepository();
         this.appointmentRepo = new AppointmentRepository(patientRepo, doctorRepo);
         this.sc = new Scanner(System.in);
-
         dtFmt.setLenient(false);
     }
 
@@ -33,10 +29,10 @@ public class HealthApp {
     }
 
     public void run() {
-        System.out.println("=== Sistemi i Menaxhimit te Shendetit (CLI) ===");
+        Console.printHeader();
 
         while (true) {
-            printMainMenu();
+            Console.printMainMenu();
             String choice = readNonEmpty("Zgjedhja: ").toUpperCase(Locale.ROOT);
 
             switch (choice) {
@@ -45,7 +41,7 @@ public class HealthApp {
                 case "T" -> appointmentMenu();
                 case "N" -> notificationMenu();
                 case "Q" -> {
-                    System.out.println("Dalje...\nMirupafshim!");
+                    System.out.println("Mireupafshim!");
                     return;
                 }
                 default -> System.out.println("Opsion i pavlefshem!\n");
@@ -53,26 +49,11 @@ public class HealthApp {
         }
     }
 
-    private void printMainMenu() {
-        System.out.println("\n--- MENU KRYESORE ---");
-        System.out.println("P - Pacientet");
-        System.out.println("D - Doktoret");
-        System.out.println("T - Terminet");
-        System.out.println("N - Dërgo njoftim");
-        System.out.println("Q - Dil");
-    }
-
     private void patientMenu() {
         while (true) {
-            System.out.println("\n--- PACIENTET ---");
-            System.out.println("1 - Regjistro pacient");
-            System.out.println("2 - Shfaq pacientet");
-            System.out.println("3 - Kerko pacient me ID");
-            System.out.println("4 - Modifiko pacient");
-            System.out.println("5 - Fshij pacient");
-            System.out.println("B - Kthehu");
-
+            Console.printPatientMenu();
             String c = readNonEmpty("Zgjedhja: ").toUpperCase(Locale.ROOT);
+
             try {
                 switch (c) {
                     case "1" -> addPatient();
@@ -84,24 +65,16 @@ public class HealthApp {
                     default -> System.out.println("Opsion i pavlefshem!");
                 }
             } catch (CustomException e) {
-                System.out.println("Gabim: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Gabim i papritur: " + e.getMessage());
+                Console.error(e.getMessage());
             }
         }
     }
 
     private void doctorMenu() {
         while (true) {
-            System.out.println("\n--- DOKTORET ---");
-            System.out.println("1 - Regjistro doktor");
-            System.out.println("2 - Shfaq doktoret");
-            System.out.println("3 - Kerko doktor me ID");
-            System.out.println("4 - Modifiko doktor");
-            System.out.println("5 - Fshij doktor");
-            System.out.println("B - Kthehu");
-
+            Console.printDoctorMenu();
             String c = readNonEmpty("Zgjedhja: ").toUpperCase(Locale.ROOT);
+
             try {
                 switch (c) {
                     case "1" -> addDoctor();
@@ -113,25 +86,16 @@ public class HealthApp {
                     default -> System.out.println("Opsion i pavlefshem!");
                 }
             } catch (CustomException e) {
-                System.out.println("Gabim: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Gabim i papritur: " + e.getMessage());
+                Console.error(e.getMessage());
             }
         }
     }
 
     private void appointmentMenu() {
         while (true) {
-            System.out.println("\n--- TERMINET ---");
-            System.out.println("1 - Planifiko termin");
-            System.out.println("2 - Shfaq te gjitha terminet");
-            System.out.println("3 - Shfaq terminet per pacient");
-            System.out.println("4 - Shfaq terminet per status");
-            System.out.println("5 - Perfundo termin (vendos raport + COMPLETED)");
-            System.out.println("6 - Anulo termin (CANCELLED)");
-            System.out.println("B - Kthehu");
-
+            Console.printAppointmentMenu();
             String c = readNonEmpty("Zgjedhja: ").toUpperCase(Locale.ROOT);
+
             try {
                 switch (c) {
                     case "1" -> scheduleAppointment();
@@ -140,24 +104,19 @@ public class HealthApp {
                     case "4" -> listAppointmentsByStatus();
                     case "5" -> completeAppointment();
                     case "6" -> cancelAppointment();
+                    case "7" -> removeAppointment();
                     case "B" -> {return;}
                     default -> System.out.println("Opsion i pavlefshem!");
                 }
             } catch (CustomException e) {
-                System.out.println("Gabim: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Gabim i papritur: " + e.getMessage());
+                Console.error(e.getMessage());
             }
         }
     }
 
     private void notificationMenu() {
         while (true) {
-            System.out.println("\n--- NJOFTIMET ---");
-            System.out.println("1 - Dergo Email");
-            System.out.println("2 - Dergo SMS");
-            System.out.println("B - Kthehu");
-
+            Console.printNotiftMenu();
             String c = readNonEmpty("Zgjedhja: ").toUpperCase(Locale.ROOT);
             try {
                 switch (c) {
@@ -167,15 +126,13 @@ public class HealthApp {
                     default -> System.out.println("Opsion i pavlefshem!");
                 }
             } catch (CustomException e) {
-                System.out.println("Gabim: " + e.getMessage());
-            } catch (Exception e) {
-                System.out.println("Gabim i papritur: " + e.getMessage());
+                Console.error(e.getMessage());
             }
         }
     }
 
     private void addPatient() throws CustomException {
-        System.out.println("\n--- Regjistrim pacienti ---");
+        Console.section("Regjistrim pacienti");
 
         int suggestedId = nextPatientId();
         System.out.println("Sugjerim ID (automatik): " + suggestedId);
@@ -188,16 +145,16 @@ public class HealthApp {
 
         Patient p = new Patient(id, name, phone, email, age);
         patientRepo.addPatient(p);
-        System.out.println("U regjistrua: " + p.getDetails());
+        Console.success("U regjistrua: " + p.getDetails());
     }
 
     private void listPatients() {
         List<Patient> list = patientRepo.getAllPatients();
         if (list.isEmpty()) {
-            System.out.println("Nuk ka paciente te regjistruar.");
+            Console.error("\nNuk ka paciente te regjistruar.");
             return;
         }
-        System.out.println("\n--- Lista e pacienteve (" + list.size() + ") ---");
+        Console.section("Lista e pacienteve (" + list.size() + ")");
         for (Patient p : list) {
             System.out.println(p.getDetails());
         }
@@ -210,7 +167,7 @@ public class HealthApp {
     }
 
     private void updatePatient() throws CustomException {
-        System.out.println("\n--- Modifikim pacienti ---");
+        Console.section("Modifikim pacienti");
         int id = readInt("ID e pacientit: ");
         Patient old = patientRepo.getPatientById(id);
 
@@ -224,7 +181,7 @@ public class HealthApp {
 
         Patient updated = new Patient(id, name, phone, email, age);
         patientRepo.updatePatient(updated);
-        System.out.println("U perditesua: " + updated.getDetails());
+        Console.success("U perditesua: " + updated.getDetails());
     }
 
     private void removePatient() {
@@ -242,23 +199,23 @@ public class HealthApp {
     }
 
     private void addDoctor() throws CustomException {
-        System.out.println("\n--- Regjistrim doktori ---");
+        Console.section("Regjistrim doktori");
         String name = readNonEmpty("Emri: ");
         String phone = readLine("Tel: ");
         String email = readLine("Email: ");
         String speciality = readNonEmpty("Specializimi: ");
 
         Doctor d = doctorRepo.createDoctor(name, phone, email, speciality);
-        System.out.println("U regjistrua: " + d.getDetails());
+        Console.success("U regjistrua: " + d.getDetails());
     }
 
     private void listDoctors() {
         List<Doctor> list = doctorRepo.getAllDoctors();
         if (list.isEmpty()) {
-            System.out.println("Nuk ka doktore te regjistruar.");
+            Console.error("\nNuk ka doktore te regjistruar.");
             return;
         }
-        System.out.println("\n--- Lista e doktoreve (" + list.size() + ") ---");
+        Console.section("Lista e Doktoreve (" + list.size() + ")");
         for (Doctor d : list) {
             System.out.println(d.getDetails());
         }
@@ -271,7 +228,7 @@ public class HealthApp {
     }
 
     private void updateDoctor() throws CustomException {
-        System.out.println("\n--- Modifikim doktori ---");
+        Console.section("Modifikim i Doktorit)");
         int id = readInt("ID e doktorit: ");
         Doctor old = doctorRepo.getDoctorById(id);
 
@@ -285,7 +242,7 @@ public class HealthApp {
 
         Doctor updated = new Doctor(id, name, phone, email, speciality);
         doctorRepo.updateDoctor(updated);
-        System.out.println("U perditesua: " + updated.getDetails());
+        Console.success("U perditesua: " + updated.getDetails());
     }
 
     private void removeDoctor() {
@@ -294,133 +251,9 @@ public class HealthApp {
         System.out.println(ok ? "Doktori u fshi." : "Doktori nuk u gjet.");
     }
 
-    private void scheduleAppointment() throws CustomException {
-        System.out.println("\n--- Planifikim termini ---");
-
-        if (patientRepo.getAllPatients().isEmpty()) {
-            System.out.println("Nuk ka paciente! Regjistro pacient fillimisht.");
-            return;
-        }
-        if (doctorRepo.getAllDoctors().isEmpty()) {
-            System.out.println("Nuk ka doktore! Regjistro doktor fillimisht.");
-            return;
-        }
-
-        listPatientsShort();
-        int patientId = readInt("Zgjedh ID e pacientit: ");
-
-        listDoctorsShort();
-        int doctorId = readInt("Zgjedh ID e doktorit: ");
-
-        Date date = readDate("Data/ora (yyyy-MM-dd HH:mm): ");
-
-        Appointment a = appointmentRepo.createAppointment(patientId, doctorId, date, "");
-        a.setStatus(AppointmentStatus.SCHEDULED);
-        appointmentRepo.updateAppointment(a);
-
-        System.out.println("U planifikua termini: ID=" + a.getId() + ", Status=" + statusSq(a.getStatus()));
-    }
-
-    private void listAppointments() {
-        List<Appointment> list = appointmentRepo.getAllAppointments();
-        if (list.isEmpty()) {
-            System.out.println("Nuk ka termine te regjistruara.");
-            return;
-        }
-        System.out.println("\n--- Lista e termineve (" + list.size() + ") ---");
-        for (Appointment a : list) {
-            System.out.println(formatAppointment(a));
-        }
-    }
-
-    private void listAppointmentsByPatient() {
-        int patientId = readInt("ID e pacientit: ");
-        List<Appointment> list = appointmentRepo.getAllAppointments();
-
-        boolean any = false;
-        for (Appointment a : list) {
-            if (a.getPatient() != null && a.getPatient().getId() == patientId) {
-                if (!any) {
-                    System.out.println("\n--- Terminet per pacientin ID=" + patientId + " ---");
-                    any = true;
-                }
-                System.out.println(formatAppointment(a));
-            }
-        }
-        if (!any) System.out.println("Nuk u gjet asnje termin per kete pacient.");
-    }
-
-    private void listAppointmentsByStatus() {
-        AppointmentStatus st = readStatus();
-        List<Appointment> list = appointmentRepo.getAllAppointments();
-
-        boolean any = false;
-        for (Appointment a : list) {
-            if (a.getStatus() == st) {
-                if (!any) {
-                    System.out.println("\n--- Terminet me status: " + statusSq(st) + " ---");
-                    any = true;
-                }
-                System.out.println(formatAppointment(a));
-            }
-        }
-        if (!any) System.out.println("Nuk u gjet asnje termin me kete status.");
-    }
-
-    private void completeAppointment() throws CustomException {
-        int id = readInt("ID e terminit: ");
-        Appointment a = appointmentRepo.getAppointmentById(id);
-
-        String report = readNonEmpty("Raporti (i detyrueshem): ");
-        a.setReport(report);
-        a.setStatus(AppointmentStatus.COMPLETED);
-        appointmentRepo.updateAppointment(a);
-
-        System.out.println("Termini u perfundua. Status=" + statusSq(a.getStatus()));
-    }
-
-    private void cancelAppointment() throws CustomException {
-        int id = readInt("ID e terminit: ");
-        Appointment a = appointmentRepo.getAppointmentById(id);
-        a.setStatus(AppointmentStatus.CANCELLED);
-        appointmentRepo.updateAppointment(a);
-        System.out.println("Termini u anulua. Status=" + statusSq(a.getStatus()));
-    }
-
-    private void listPatientsShort() {
-        System.out.println("\nPacientet:");
-        for (Patient p : patientRepo.getAllPatients()) {
-            System.out.println("  - ID=" + p.getId() + ", Emri=" + p.getName());
-        }
-    }
-
-    private void listDoctorsShort() {
-        System.out.println("\nDoktoret:");
-        for (Doctor d : doctorRepo.getAllDoctors()) {
-            System.out.println("  - ID=" + d.getId() + ", Emri=" + d.getName() + ", Specializimi=" + d.getSpeciality());
-        }
-    }
-
-    private String formatAppointment(Appointment a) {
-        String dateStr = (a.getDate() == null) ? "" : dtFmt.format(a.getDate());
-        String p = (a.getPatient() == null) ? "" : (a.getPatient().getId() + " - " + a.getPatient().getName());
-        String d = (a.getStaff() == null) ? "" : (a.getStaff().getId() + " - " + a.getStaff().getName());
-
-        String report = (a.getReport() == null || a.getReport().isBlank()) ? "(pa raport)" : a.getReport();
-        if (a.getStatus() != AppointmentStatus.COMPLETED) {
-            report = "(raporti shfaqet vetem kur perfundon)";
-        }
-
-        return "Appointment ID=" + a.getId() +
-                " | Pacienti=" + p +
-                " | Doktori=" + d +
-                " | Data=" + dateStr +
-                " | Status=" + statusSq(a.getStatus()) +
-                " | Raporti=" + report;
-    }
+    // == terminet ==
 
     private String statusSq(AppointmentStatus st) {
-        if (st == null) return "(pa status)";
         return switch (st) {
             case SCHEDULED -> "I planifikuar";
             case COMPLETED -> "I perfunduar";
@@ -428,9 +261,60 @@ public class HealthApp {
         };
     }
 
+    private void scheduleAppointment() throws CustomException {
+        Console.section("Bej Terminin");
+        if (patientRepo.getAllPatients().isEmpty()) {
+            Console.error("\nNuk ka paciente!");
+            return;
+        }
+        if (doctorRepo.getAllDoctors().isEmpty()) {
+            Console.error("\nNuk ka doktore!");
+            return;
+        }
+
+        listPatientsForAppointment();
+        int patientId = readInt("Zgjedh ID e pacientit: ");
+
+        listDoctorsForAppointment();
+        int doctorId = readInt("Zgjedh ID e doktorit: ");
+
+        Date date = readDate("Koha: (yyyy-MM-dd HH:mm): ");
+        Appointment a = appointmentRepo.createAppointment(patientId, doctorId, date, "");
+        Console.success("U planifikua termini: ID = " + a.getId() + ", Status =" + statusSq(a.getStatus()));
+    }
+
+    private void listAppointments() {
+        List<Appointment> list = appointmentRepo.getAllAppointments();
+        if (list.isEmpty()) {
+            Console.error("\nNuk ka termine te regjistruara.");
+            return;
+        }
+
+        Console.section("Lista e termineve (" + list.size() + ")");
+        for (Appointment a : list) {
+            System.out.println(a);
+        }
+    }
+
+    private void listAppointmentsByPatient() {
+        int patientId = readInt("ID e pacientit: ");
+        List<Appointment> filtered =
+                appointmentRepo.getAllAppointments().stream()
+                .filter(a -> a.getPatient() != null && a.getPatient().getId() == patientId)
+                .toList();
+
+        if (filtered.isEmpty()) {
+            Console.error("Nuk u gjet asnje termin per kete pacient.");
+            return;
+        }
+
+        Console.section("Terminet per pacientin ID = " + patientId);
+        filtered.forEach(System.out::println);
+    }
+
     private AppointmentStatus readStatus() {
         while (true) {
-            System.out.println("Statuset: 1=SCHEDULED (I planifikuar), 2=COMPLETED (I perfunduar), 3=CANCELLED (I anuluar)");
+            System.out.println("Statuset: \n1 = SCHEDULED\n2 = COMPLETED\n3 = CANCELLED");
             String s = readNonEmpty("Zgjedh statusin (1/2/3): ");
             switch (s) {
                 case "1" -> {return AppointmentStatus.SCHEDULED;}
@@ -441,11 +325,70 @@ public class HealthApp {
         }
     }
 
+    private void listAppointmentsByStatus() {
+        AppointmentStatus st = readStatus();
+        List<Appointment> filtered =
+                appointmentRepo.getAllAppointments().stream()
+                        .filter(a -> a.getStatus() == st)
+                        .toList();
+
+        if (filtered.isEmpty()) {
+            Console.error("Nuk u gjet asnje termin me kete status.");
+            return;
+        }
+
+        Console.section("Terminet me status: " + statusSq(st));
+        filtered.forEach(System.out::println);
+    }
+
+    private void completeAppointment() throws CustomException {
+        int id = readInt("ID e terminit: ");
+        Appointment a = appointmentRepo.getAppointmentById(id);
+        String report = readNonEmpty("Raporti: ");
+        a.setStatus(AppointmentStatus.COMPLETED);
+        a.setReport(report);
+
+        appointmentRepo.updateAppointment(a);
+
+        Console.success("Termini u perfundua. Status = " + statusSq(a.getStatus()));
+    }
+
+    private void cancelAppointment() throws CustomException {
+        int id = readInt("ID e terminit: ");
+        Appointment a = appointmentRepo.getAppointmentById(id);
+        a.setStatus(AppointmentStatus.CANCELLED);
+
+        appointmentRepo.updateAppointment(a);
+
+        Console.error("Termini u anulua. Status =" + statusSq(a.getStatus()));
+    }
+
+    private void removeAppointment() throws CustomException {
+        int id = readInt("ID e terminit: ");
+        appointmentRepo.removeAppointment(id);
+
+        Console.success("Termini u fshi.");
+    }
+
+    private void listPatientsForAppointment() {
+        System.out.println("\nPacientet:");
+        for (Patient p : patientRepo.getAllPatients()) {
+            System.out.println(p.getDetails());
+        }
+    }
+
+    private void listDoctorsForAppointment() {
+        System.out.println("\nDoktoret:");
+        for (Doctor d : doctorRepo.getAllDoctors()) {
+            System.out.println(d.getDetails());
+        }
+    }
+
     private void sendEmailNotification() throws CustomException {
         int patientId = readInt("ID e pacientit: ");
         Patient p = patientRepo.getPatientById(patientId);
         if (p.getEmail() == null || p.getEmail().isBlank()) {
-            System.out.println("Pacienti nuk ka email.");
+            Console.error("Pacienti nuk ka email.");
             return;
         }
         String msg = readNonEmpty("Mesazhi: ");
@@ -457,12 +400,12 @@ public class HealthApp {
         int patientId = readInt("ID e pacientit: ");
         Patient p = patientRepo.getPatientById(patientId);
         if (p.getPhone() == null || p.getPhone().isBlank()) {
-            System.out.println("Pacienti nuk ka numer telefoni.");
+            Console.error("Pacienti nuk ka numer telefoni.");
             return;
         }
-        String msg = readNonEmpty("Mesazhi: ");
-        NotificationService svc = new SMSService(p.getPhone());
-        svc.sendNotification("Per: " + p.getName() + " | " + msg);
+        String msg = readNonEmpty("Mesazhi ");
+        NotificationService ns = new SMSService(p.getPhone());
+        ns.sendNotification("per: " + p.getName() + " | " + msg);
     }
 
     private String readLine(String prompt) {
@@ -474,8 +417,10 @@ public class HealthApp {
         while (true) {
             System.out.print(prompt);
             String s = sc.nextLine();
-            if (s != null && !s.trim().isEmpty()) return s.trim();
-            System.out.println("Nuk lejohet bosh!");
+            if (s != null && !s.trim().isEmpty()) {
+                return s.trim();
+            }
+            Console.error("Nuk lejohet bosh!");
         }
     }
 
@@ -486,7 +431,7 @@ public class HealthApp {
             try {
                 return Integer.parseInt(s.trim());
             } catch (Exception e) {
-                System.out.println("Shkruaj nje numer te sakte!");
+                Console.error("Shkruaj nje numer te sakte!");
             }
         }
     }
@@ -495,11 +440,13 @@ public class HealthApp {
         while (true) {
             System.out.print(prompt);
             String s = sc.nextLine();
-            if (s == null || s.trim().isEmpty()) return def;
+            if (s == null || s.trim().isEmpty()) {
+                return def;
+            }
             try {
                 return Integer.parseInt(s.trim());
             } catch (Exception e) {
-                System.out.println("Shkruaj nje numer te sakte!");
+                Console.error("Shkruaj nje numer te sakte!");
             }
         }
     }
@@ -507,7 +454,9 @@ public class HealthApp {
     private String readLineWithDefault(String prompt, String def) {
         System.out.print(prompt);
         String s = sc.nextLine();
-        if (s == null || s.trim().isEmpty()) return def;
+        if (s == null || s.trim().isEmpty()) {
+            return def;
+        }
         return s.trim();
     }
 
@@ -516,9 +465,15 @@ public class HealthApp {
             System.out.print(prompt);
             String s = sc.nextLine();
             try {
-                return dtFmt.parse(s.trim());
+                Date inputDate = dtFmt.parse(s.trim());
+                Date now = new Date();
+                if (inputDate.before(now)) {
+                    Console.error("Data nuk mund te jete ne te kaluaren!");
+                    continue;
+                }
+                return inputDate;
             } catch (ParseException e) {
-                System.out.println("Format i gabuar. Shembull: 2025-12-12 14:30");
+                Console.error("Format i gabuar. Shembull: 2025-12-13 15:40");
             }
         }
     }

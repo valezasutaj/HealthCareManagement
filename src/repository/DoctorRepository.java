@@ -188,7 +188,7 @@ public class DoctorRepository {
             } else {
                 if (c == '"') {
                     inQuotes = true;
-                } else if (c == ',') {
+                } else if (c == ';') {
                     fields.add(cur.toString().trim());
                     cur.setLength(0);
                 } else {

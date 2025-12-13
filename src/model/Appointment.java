@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Appointment {
     private int id;
@@ -27,7 +28,8 @@ public class Appointment {
         this.patient = patient;
         this.staff = staff;
         this.date = date;
-        this.report = report;
+        this.status = AppointmentStatus.SCHEDULED;
+        this.report = null;
     }
 
     public int getId() {
@@ -84,14 +86,32 @@ public class Appointment {
         this.report = report;
     }
 
-    public String getDetails() {
-        String patientDetails = (patient == null) ? "null" : patient.getDetails();
-        String doctorDetails = (staff == null) ? "null" : staff.getDetails();
-        return "Appointment [ID= " + id
-                + ", Pacienti= " + patientDetails
-                + ", Doktori= " + doctorDetails
-                + ", Data= " + date
-                + ", Status= " + status
-                + ", Raporti= " + report + "]";
+    public String toString() {
+        String patientInfo = (patient == null) ? "-" : patient.getId() + " - " + patient.getName();
+        String doctorInfo = (staff == null) ? "-" : staff.getId() + " - " + staff.getName();
+        String dateStr = (date == null) ? "-" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+        String statusStr = (status == null) ? "-" : status.toString();
+        String reportStr;
+        if (status == AppointmentStatus.COMPLETED) {
+            reportStr = (report == null || report.isBlank()) ? "-" : report;
+        } else {
+            reportStr = "(raporti shfaqet pas perfundimit te terminit!)";
+        }
+
+        return String.format(
+                "Termin\n" +
+                        "  ID       : %d\n" +
+                        "  Pacienti : %s\n" +
+                        "  Doktori  : %s\n" +
+                        "  Data     : %s\n" +
+                        "  Status   : %s\n" +
+                        "  Raporti  : %s",
+                id,
+                patientInfo,
+                doctorInfo,
+                dateStr,
+                statusStr,
+                reportStr
+        );
     }
 }
